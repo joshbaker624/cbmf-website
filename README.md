@@ -38,7 +38,7 @@ The header, footer and closing call-to-action are repeated in each HTML file. If
 
 ## To-do before launch
 
-- [ ] **Add a photo of Charlotte.** Save it as `assets/img/charlotte.jpg`, then uncomment the `<img class="portrait">` line in the "Her story" section of `index.html`.
+- [x] ~~Add a photo of Charlotte~~ (done: `assets/img/charlotte.jpg` / `.webp`, shown in the homepage "Her story" section).
 - [ ] **Memorial Weekend 2026 dates.** `events.html` currently says "Save the date" and points people to Facebook. Add the real dates and locations once they're set.
 - [ ] **Board list and titles.** These come from the 2022 Neuse News article (all shown as "Board Member"). Confirm names and add titles (President, Treasurer, etc.).
 - [ ] **Contact email / mailing address.** There's no email or mailing address yet, so every "reach out" button goes to Facebook. Add an email (and a check-mailing address on the donate page) if you want one.
