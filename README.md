@@ -26,6 +26,7 @@ python3 -m http.server 8765
 
 - `assets/css/styles.css`: all styles. Colors, fonts and spacing are CSS variables at the top of the file.
 - `assets/js/main.js`: sticky header, mobile menu, scroll reveals, count-up numbers.
+- Every page links the CSS and JS as `styles.css?v=2` and `main.js?v=2`. After changing either file, bump the number in all five pages so returning visitors don't get a stale cached copy.
 - `assets/img/`: logo (transparent cutout), favicons, and photos (WebP).
 - `_source/`: the raw pages and images downloaded from the old Google Site, kept for reference. Don't deploy this folder.
 

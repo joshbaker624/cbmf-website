@@ -601,6 +601,18 @@ em.accent, .accent { font-style: italic; color: var(--teal-deep); font-variation
 }
 .pullquote cite { display: block; margin-top: 16px; font-family: var(--font-body); font-style: normal; font-size: 1rem; font-weight: 700; color: var(--muted); letter-spacing: 0; }
 
+/* Family photo feature (story page) */
+.family-feature { padding-bottom: clamp(60px, 8vw, 110px); }
+.family-photo { position: relative; margin: 0 auto; max-width: min(960px, (100svh - 140px) * 1.6); }
+.family-photo picture, .family-photo img { display: block; width: 100%; }
+.family-photo img { border-radius: clamp(20px, 3vw, 36px); box-shadow: var(--shadow-lg); }
+.family-photo figcaption {
+  position: absolute; left: clamp(16px, 4vw, 40px); bottom: clamp(-22px, -2vw, -16px);
+  background: #fff; padding: 8px 22px 10px; border-radius: 999px; box-shadow: var(--shadow);
+  transform: rotate(-2deg);
+}
+.family-photo figcaption .hand { font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.8rem); color: var(--ink); }
+
 /* Journey — sticky heading beside the timeline */
 .journey { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(40px, 6vw, 100px); align-items: start; }
 .journey-head { position: sticky; top: 130px; }
