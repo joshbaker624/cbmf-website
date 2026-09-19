@@ -665,12 +665,11 @@ em.accent, .accent { font-style: italic; color: var(--teal-deep); font-variation
 /* Event lineup cards */
 .lineup { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; }
 .lineup-card {
-  grid-column: span 2; position: relative; overflow: hidden;
+  grid-column: span 3; position: relative; overflow: hidden;
   padding: 34px 30px 30px; border-radius: var(--radius); background: #fff; border: 1px solid var(--line);
   transition: transform .5s var(--ease), box-shadow .5s var(--ease);
   display: flex; flex-direction: column;
 }
-.lineup-card:nth-child(4), .lineup-card:nth-child(5) { grid-column: span 3; }
 .lineup-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
 .lineup-card .icon { width: 60px; height: 60px; border-radius: 16px; display: grid; place-items: center; margin-bottom: 22px; }
 .lineup-card .icon svg { width: 30px; height: 30px; }
@@ -684,8 +683,7 @@ em.accent, .accent { font-style: italic; color: var(--teal-deep); font-variation
 }
 .bg-teal { background: var(--teal-soft); } .bg-sun { background: #fdebc8; } .bg-pink { background: #fde0ea; }
 .bg-sky { background: #dcecfb; } .bg-sand { background: var(--sand-2); }
-@media (max-width: 1000px) { .lineup-card, .lineup-card:nth-child(4), .lineup-card:nth-child(5) { grid-column: span 3; } }
-@media (max-width: 640px) { .lineup { grid-template-columns: 1fr; } .lineup-card, .lineup-card:nth-child(4), .lineup-card:nth-child(5) { grid-column: auto; } }
+@media (max-width: 640px) { .lineup { grid-template-columns: 1fr; } .lineup-card { grid-column: auto; } }
 
 /* Save-the-date ticket */
 .ticket {
@@ -723,7 +721,7 @@ em.accent, .accent { font-style: italic; color: var(--teal-deep); font-variation
 @media (max-width: 900px) { .past { grid-template-columns: 1fr; } }
 
 /* Involvement cards */
-.involve { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.involve { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .involve-card {
   padding: 30px 26px; border-radius: var(--radius); background: var(--ink-2); color: #cfe2e8;
   border: 1px solid rgba(255,255,255,.08); transition: transform .5s var(--ease), background-color .4s;
@@ -732,8 +730,7 @@ em.accent, .accent { font-style: italic; color: var(--teal-deep); font-variation
 .involve-card svg { width: 34px; height: 34px; color: var(--teal); margin-bottom: 20px; }
 .involve-card h3 { font-size: 1.3rem; }
 .involve-card p { font-size: .96rem; margin: 0; }
-@media (max-width: 1000px) { .involve { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .involve { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .involve { grid-template-columns: 1fr; } }
 
 /* Donate page */
 .donate-hero-card {
