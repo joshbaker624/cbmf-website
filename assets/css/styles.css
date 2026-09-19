@@ -262,7 +262,7 @@ em.accent, .accent { font-style: italic; color: var(--teal-deep); font-variation
   position: relative; isolation: isolate;
   min-height: max(640px, 100svh);
   display: flex; align-items: center;
-  padding: 96px 0 calc(var(--sea-h) + clamp(100px, 13vh, 130px));
+  padding: 96px 0 calc(var(--sea-h) + clamp(110px, 14vh, 140px));
   overflow: hidden;
   background: linear-gradient(180deg, #b9e5fa 0%, #dcf3fb 45%, #fdebd3 82%, #fcdcae 100%);
 }
@@ -302,8 +302,6 @@ em.accent, .accent { font-style: italic; color: var(--teal-deep); font-variation
 
 /* SVG scene animations */
 .sun-group { animation: sunrise 3.2s var(--ease) both; }
-.sun-glow { animation: pulse 6s ease-in-out infinite; transform-origin: 200px 220px; }
-@keyframes pulse { 0%, 100% { opacity: .8; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
 @keyframes sunrise { from { transform: translateY(160px); } to { transform: none; } }
 .cloud { animation: sway ease-in-out infinite alternate; }
 .cloud.c1 { animation-duration: 9s; }
