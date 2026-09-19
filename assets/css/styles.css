@@ -168,11 +168,19 @@ em.accent, .accent { font-style: italic; color: var(--teal-deep); font-variation
 }
 .site-header.is-scrolled {
   padding-block: 10px;
+  box-shadow: 0 1px 0 var(--line), 0 10px 30px -20px rgba(14,38,53,.35);
+}
+/* The frosted background lives on a pseudo-element: backdrop-filter on the
+   header itself would make it the containing block for the fixed-position
+   mobile menu, cropping the menu to the header's height once scrolled. */
+.site-header::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
   background: rgba(251, 246, 236, 0.86);
   -webkit-backdrop-filter: saturate(160%) blur(14px);
   backdrop-filter: saturate(160%) blur(14px);
-  box-shadow: 0 1px 0 var(--line), 0 10px 30px -20px rgba(14,38,53,.35);
+  opacity: 0; transition: opacity .4s;
 }
+.site-header.is-scrolled::before { opacity: 1; }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
 .brand img {
