@@ -339,13 +339,18 @@ em.accent, .accent { font-style: italic; color: var(--teal-deep); font-variation
 .page-hero-art svg { display: block; }
 .page-hero-art svg { width: 100%; height: auto; }
 .page-hero .sun-dot {
+  --sun: clamp(120px, 16vw, 240px);
   position: absolute; z-index: 0; right: 12%;
   /* centre of the sun sits on the horizon line of the wave band below */
-  bottom: calc(7.3vw - clamp(60px, 8vw, 120px));
-  width: clamp(120px, 16vw, 240px); aspect-ratio: 1; border-radius: 50%;
+  bottom: calc(7.3vw - var(--sun) / 2);
+  width: var(--sun); aspect-ratio: 1; border-radius: 50%;
   border: 3px solid #2a2320;
-  background: radial-gradient(circle at 40% 40%, #ffd27a, var(--sun) 60%, #f19a1a);
-  box-shadow: 0 0 120px 40px rgba(246, 166, 35, .35);
+  background: radial-gradient(circle at 40% 40%, #ffd27a, var(--sun-color, #f6a623) 60%, #f19a1a);
+  /* three halo rings, same proportions and colours as the homepage sun */
+  box-shadow:
+    0 0 0 calc(var(--sun) * .085) rgba(255, 191, 71, .55),
+    0 0 0 calc(var(--sun) * .165) rgba(255, 201, 94, .42),
+    0 0 0 calc(var(--sun) * .246) rgba(255, 210, 122, .3);
   animation: sunrise 2.8s var(--ease) both;
 }
 .crumbs { display: flex; gap: 8px; font-size: .88rem; font-weight: 700; color: var(--muted); margin-bottom: 18px; }
