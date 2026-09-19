@@ -273,7 +273,7 @@ em.accent, .accent { font-style: italic; color: var(--teal-deep); font-variation
 .scene-sea { position: absolute; left: 0; bottom: 0; width: 100%; height: var(--sea-h); }
 /* horizon sits 10/320 of the sea band from its top */
 .scene-sun {
-  position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(var(--sea-h) * 0.969 - 1px);
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(var(--sea-h) * 0.969 - 8px); /* tucked a few px behind the water so no sky shows through the wave dips */
   width: clamp(220px, 19vw, 290px); aspect-ratio: 400 / 220; overflow: hidden;
 }
 .scene-sun svg { width: 100%; height: 100%; overflow: visible; }
