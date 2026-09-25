@@ -107,6 +107,78 @@
     }
   });
 
+  /* ---------- Sponsor marquee ----------
+     Data lives in sponsors.json (see admin.html). Each entry is { name, logo },
+     where logo is a data URI so the whole sponsor list is one committable file. */
+  function buildChip(sponsor) {
+    var chip = document.createElement("div");
+    chip.className = "sponsor-chip";
+    var name = document.createElement("span");
+    name.className = "name";
+    name.textContent = sponsor.name || "";
+    if (sponsor.logo) {
+      var img = document.createElement("img");
+      img.src = sponsor.logo;
+      img.alt = sponsor.name ? sponsor.name + " logo" : "Sponsor logo";
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.addEventListener("error", function () {
+        img.remove();
+        chip.classList.add("is-textonly");
+      });
+      chip.appendChild(img);
+    } else {
+      chip.classList.add("is-textonly");
+    }
+    chip.appendChild(name);
+    return chip;
+  }
+
+  function renderMarquee(marquee, list) {
+    var track = marquee && marquee.querySelector("[data-marquee-track]");
+    if (!track) return false;
+    track.textContent = "";
+    var clean = (list || []).filter(function (s) { return s && (s.name || s.logo); });
+    if (!clean.length) return false;
+
+    /* Build one half of the track, repeating the list until it is wider than
+       the viewport — a short list would otherwise loop with a visible gap. */
+    var reps = 0;
+    do {
+      clean.forEach(function (s) { track.appendChild(buildChip(s)); });
+      reps++;
+    } while (track.scrollWidth < marquee.offsetWidth && reps < 12);
+    var halfWidth = track.scrollWidth;
+
+    /* Second identical half, so the -50% keyframe lands exactly on its start */
+    for (var i = 0; i < reps; i++) {
+      clean.forEach(function (s) {
+        var clone = buildChip(s);
+        clone.classList.add("is-clone");
+        clone.setAttribute("aria-hidden", "true");
+        track.appendChild(clone);
+      });
+    }
+
+    marquee.style.setProperty("--marquee-duration", Math.max(18, Math.round(halfWidth / 55)) + "s");
+    return true;
+  }
+
+  var sponsorSection = document.querySelector("[data-sponsors]");
+  if (sponsorSection && window.fetch) {
+    fetch("sponsors.json", { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (list) {
+        var marquee = sponsorSection.querySelector("[data-marquee]");
+        if (Array.isArray(list) && renderMarquee(marquee, list)) sponsorSection.hidden = false;
+      })
+      .catch(function () { /* no sponsors file yet: leave the section hidden */ });
+  }
+
+  /* Shared with admin.html for its live preview */
+  window.CBMF = window.CBMF || {};
+  window.CBMF.renderMarquee = renderMarquee;
+
   /* Footer year */
   document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 })();

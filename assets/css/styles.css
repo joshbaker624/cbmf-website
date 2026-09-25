@@ -844,3 +844,103 @@ main { overflow-x: clip; }
   .site-header, .hero-scene, .cta-art, .menu-toggle { display: none !important; }
   body { background: #fff; }
 }
+
+/* ---------- Sponsor marquee ---------- */
+.sponsors .section-head { margin-bottom: clamp(28px, 4vw, 44px); }
+
+.marquee {
+  position: relative;
+  overflow: hidden;
+  padding: 6px 0 14px;
+  /* Fade the edges so cards slide in and out instead of popping */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  /* Duration is set per-page from JS so the speed stays constant as sponsors are added */
+  animation: marquee-scroll var(--marquee-duration, 40s) linear infinite;
+  will-change: transform;
+}
+
+/* Pause for anyone reading a name, by mouse or by keyboard */
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track { animation-play-state: paused; }
+
+@keyframes marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+.sponsor-chip {
+  /* Spacing lives in margin, not flex gap: the track must be exactly two
+     identical halves for the -50% loop to be seamless. */
+  flex: 0 0 auto;
+  margin-right: clamp(18px, 3vw, 34px);
+  width: clamp(168px, 20vw, 208px);
+  min-height: 148px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px 20px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+.marquee:hover .sponsor-chip:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.sponsor-chip img {
+  display: block;
+  height: 64px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.sponsor-chip .name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  color: var(--muted);
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* No logo yet: show the name on a sand tile so the card still reads as a card */
+.sponsor-chip.is-textonly {
+  background: linear-gradient(160deg, var(--sand-2), var(--sand));
+}
+.sponsor-chip.is-textonly .name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No sliding: lay the sponsors out as a static centered grid */
+  .marquee {
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+    padding-inline: var(--gutter);
+  }
+  .marquee-track {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-inline: auto;
+    max-width: var(--wrap);
+  }
+  .sponsor-chip { margin: 0 clamp(9px, 1.5vw, 17px) clamp(18px, 3vw, 34px); }
+  .marquee-track .is-clone { display: none; }
+}
