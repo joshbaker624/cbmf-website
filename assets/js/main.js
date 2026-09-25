@@ -108,8 +108,13 @@
   });
 
   /* ---------- Sponsor marquee ----------
-     Data lives in sponsors.json (see admin.html). Each entry is { name, logo },
-     where logo is a data URI so the whole sponsor list is one committable file. */
+     Data lives in sponsors.json, managed from admin.html. Each entry is
+     { name, logo }, where logo is a path under assets/img/sponsors/.
+
+     MARQUEE_SPEED is how fast the band slides, in pixels per second. It is a
+     speed rather than a duration so the pace stays the same as sponsors are
+     added — more sponsors make the loop longer, not faster. Lower is calmer. */
+  var MARQUEE_SPEED = 38;
   function buildChip(sponsor) {
     var chip = document.createElement("div");
     chip.className = "sponsor-chip";
@@ -160,7 +165,7 @@
       });
     }
 
-    marquee.style.setProperty("--marquee-duration", Math.max(18, Math.round(halfWidth / 55)) + "s");
+    marquee.style.setProperty("--marquee-duration", Math.max(18, Math.round(halfWidth / MARQUEE_SPEED)) + "s");
     return true;
   }
 
