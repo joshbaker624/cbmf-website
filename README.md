@@ -13,20 +13,45 @@ No build step and no dependencies: plain HTML, CSS and JavaScript.
 | `events.html` | Memorial Weekend: save-the-date, event lineup, past weekends, ways to get involved |
 | `news.html` | Press coverage (WNCT, Neuse News) |
 | `donate.html` | Donate (Square link), where the money goes, other ways to give, donor FAQ |
+| `admin.html` | Sponsor manager (not linked from the site, not in the sitemap, disallowed in robots.txt) |
 
 ## Preview locally
 
 ```sh
-cd ~/Desktop/"CBMF website"
+cd ~/Developer/cbmf-website
 python3 -m http.server 8765
 # open http://localhost:8765
 ```
 
+## Sponsors
+
+The sponsor marquee on `events.html` reads `sponsors.json`:
+
+```json
+[{ "name": "Smith Farm Supply", "logo": "assets/img/sponsors/smith-farm-supply-m1x9k2.webp" }]
+```
+
+An empty array hides the whole section, so the page looks untouched until there
+are sponsors to show.
+
+Edit the list at [/admin.html](https://cbmemorialfund.com/admin.html). It signs in
+with a GitHub fine-grained token (repository access limited to this repo,
+Contents: read and write), scoped so a stolen token can only edit this website.
+The token lives in that browser's localStorage and is never committed.
+
+Saving writes one commit containing the new `sponsors.json`, any uploaded logos
+(resized to 320x160 WebP under `assets/img/sponsors/`) and deletions for logos
+nothing points at any more. Pushing to `main` makes GitHub Pages rebuild, so the
+site is live about a minute later.
+
+There is no server: without a valid token, the page can display but not save.
+
 ## Where things live
 
 - `assets/css/styles.css`: all styles. Colors, fonts and spacing are CSS variables at the top of the file.
-- `assets/js/main.js`: sticky header, mobile menu, scroll reveals, count-up numbers.
-- Every page links the CSS and JS as `styles.css?v=2` and `main.js?v=2`. After changing either file, bump the number in all five pages so returning visitors don't get a stale cached copy.
+- `assets/js/main.js`: sticky header, mobile menu, scroll reveals, count-up numbers, sponsor marquee.
+- `assets/js/admin.js`: the sponsor manager. Only loaded by `admin.html`.
+- Every page links the CSS and JS as `styles.css?v=9` and `main.js?v=9`. After changing either file, bump the number in all six pages so returning visitors don't get a stale cached copy.
 - `assets/img/`: logo (transparent cutout), favicons, and photos (WebP).
 - `_source/`: the raw pages and images downloaded from the old Google Site, kept for reference. Don't deploy this folder.
 

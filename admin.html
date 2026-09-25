@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sponsor manager — Charlotte Baker Memorial Fund</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css?v=9">
+  <style>
+    /* Admin-only chrome. The marquee preview itself uses the real site styles. */
+    body { background: var(--sand); }
+    .admin-bar {
+      background: var(--ink); color: var(--white);
+      padding: 14px var(--gutter);
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .admin-bar h1 { font-size: 1.05rem; margin: 0; font-family: var(--font-body); font-weight: 600; letter-spacing: 0.01em; }
+    .admin-bar .right { display: flex; align-items: center; gap: 14px; font-size: 0.86rem; }
+    .admin-bar a { color: var(--teal); }
+    .admin-wrap { max-width: 880px; margin: 0 auto; padding: clamp(28px, 5vw, 52px) var(--gutter) 90px; }
+
+    .card {
+      background: var(--white); border: 1px solid var(--line);
+      border-radius: var(--radius-sm); box-shadow: var(--shadow-sm);
+      padding: clamp(22px, 4vw, 34px); margin-bottom: 26px;
+    }
+    .card > h2 { font-family: var(--font-display); font-size: 1.35rem; margin: 0 0 6px; color: var(--ink); }
+    .card > p.hint { margin: 0 0 20px; color: var(--muted); font-size: 0.92rem; }
+
+    label.field { display: block; margin-bottom: 16px; font-size: 0.86rem; font-weight: 600; color: var(--ink); }
+    label.field span { display: block; margin-bottom: 6px; }
+    input[type="email"], input[type="password"], input[type="text"] {
+      width: 100%; padding: 11px 13px; font: inherit; font-size: 0.95rem; font-weight: 400;
+      color: var(--text); background: var(--sand);
+      border: 1px solid var(--line); border-radius: 10px;
+    }
+    input:focus-visible { outline: 3px solid var(--teal); outline-offset: 1px; }
+
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    button { font: inherit; cursor: pointer; }
+    .btn-admin {
+      padding: 11px 20px; border-radius: 999px; border: 1px solid transparent;
+      font-weight: 600; font-size: 0.9rem; background: var(--ink); color: var(--white);
+      transition: transform 0.25s var(--ease), opacity 0.25s var(--ease);
+    }
+    .btn-admin:hover { transform: translateY(-1px); opacity: 0.92; }
+    .btn-admin.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+    .btn-admin.sun { background: var(--sun); color: var(--ink); }
+    .btn-admin.danger { background: transparent; color: var(--coral); border-color: rgba(239, 111, 94, 0.4); }
+    .btn-admin:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    .msg { padding: 11px 14px; border-radius: 10px; font-size: 0.88rem; margin-bottom: 16px; }
+    .msg.error { background: rgba(239, 111, 94, 0.12); color: #a5341f; }
+    .msg.ok { background: var(--teal-soft); color: var(--teal-deep); }
+    .msg.warn { background: rgba(246, 166, 35, 0.16); color: #8a5a06; }
+    .msg[hidden] { display: none; }
+
+    /* Sponsor rows */
+    .rows { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+    .row {
+      display: grid; grid-template-columns: 78px 1fr auto; gap: 16px; align-items: center;
+      padding: 14px; background: var(--sand); border: 1px solid var(--line); border-radius: 12px;
+    }
+    .row .thumb {
+      width: 78px; height: 58px; border-radius: 8px; background: var(--white);
+      border: 1px solid var(--line); display: flex; align-items: center; justify-content: center;
+      overflow: hidden; padding: 5px;
+    }
+    .row .thumb img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .row .thumb .empty { font-size: 0.66rem; color: var(--muted); text-align: center; line-height: 1.25; }
+    .row .fields { min-width: 0; }
+    .row .fields input { margin-bottom: 8px; background: var(--white); }
+    .row .fileline { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .row .fileline button { font-size: 0.78rem; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--white); color: var(--ink); font-weight: 600; }
+    .row .fileline .size { font-size: 0.74rem; color: var(--muted); }
+    .row .actions { display: flex; flex-direction: column; gap: 5px; }
+    .row .actions button {
+      width: 32px; height: 28px; border-radius: 7px; border: 1px solid var(--line);
+      background: var(--white); color: var(--ink); font-size: 0.82rem; line-height: 1; display: grid; place-items: center;
+    }
+    .row .actions button:hover:not(:disabled) { background: var(--teal-soft); }
+    .row .actions button.rm:hover { background: rgba(239, 111, 94, 0.14); color: var(--coral); }
+    .row .actions button:disabled { opacity: 0.3; cursor: not-allowed; }
+    .empty-state { text-align: center; padding: 34px 10px; color: var(--muted); }
+
+    .preview-frame { background: var(--sand); border: 1px dashed var(--sand-3); border-radius: var(--radius-sm); padding: 22px 0; overflow: hidden; }
+    .steps { margin: 0; padding-left: 20px; color: var(--muted); font-size: 0.9rem; line-height: 1.75; }
+    .steps code { background: var(--sand-2); padding: 2px 6px; border-radius: 5px; font-size: 0.85em; color: var(--ink); }
+    #login { max-width: 420px; margin: clamp(40px, 10vh, 110px) auto; }
+    @media (max-width: 560px) {
+      .row { grid-template-columns: 62px 1fr; }
+      .row .thumb { width: 62px; height: 48px; }
+      .row .actions { grid-column: 1 / -1; flex-direction: row; justify-content: flex-end; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-bar">
+    <h1>CBMF &middot; Sponsor manager</h1>
+    <div class="right">
+      <a href="events.html">View the events page</a>
+      <button class="btn-admin ghost" id="signout" hidden style="background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.25); padding: 7px 15px;">Sign out</button>
+    </div>
+  </div>
+
+  <!-- ============ Sign in ============ -->
+  <section class="admin-wrap" id="login">
+    <div class="card">
+      <h2>Sign in</h2>
+      <p class="hint">Saving here commits to the website repo and publishes the live site. That needs a GitHub token with write access.</p>
+      <div class="msg error" id="login-error" hidden></div>
+      <form id="login-form">
+        <label class="field"><span>GitHub fine-grained token</span>
+          <input type="password" id="token" autocomplete="off" spellcheck="false" placeholder="github_pat_&hellip;" required></label>
+        <button class="btn-admin" type="submit" id="login-btn">Sign in</button>
+      </form>
+      <details style="margin-top: 22px;">
+        <summary style="cursor: pointer; font-weight: 600; font-size: 0.88rem; color: var(--ink);">How to make the token (once)</summary>
+        <ol class="steps" style="margin-top: 12px;">
+          <li>Sign in to GitHub as <strong>joshbaker624</strong>, then open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Settings &rarr; Developer settings &rarr; Fine-grained tokens</a>.</li>
+          <li>Name it <code>CBMF sponsor manager</code> and set an expiry &mdash; a year is fine, you will just make a new one.</li>
+          <li>Repository access: <strong>Only select repositories</strong> &rarr; <code>cbmf-website</code>. Not &ldquo;all repositories&rdquo;.</li>
+          <li>Permissions: <strong>Contents</strong> &rarr; <code>Read and write</code>. Nothing else is needed.</li>
+          <li>Generate, copy, and paste it above. It is stored in this browser only &mdash; never in the website files.</li>
+        </ol>
+        <p class="hint" style="margin-top: 10px;">That scope means the worst a stolen token can do is edit this one website repo &mdash; not your account, and not your other repos.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ Manager ============ -->
+  <main class="admin-wrap" id="panel" hidden>
+
+    <div class="card">
+      <h2>Sponsors</h2>
+      <p class="hint">Name and logo. Reorder with the arrows &mdash; the marquee runs in this order, left to right.</p>
+      <p class="hint" id="count" style="font-weight:600; color: var(--ink); margin-bottom: 14px;"></p>
+      <div class="msg warn" id="draft-notice" hidden></div>
+      <div class="rows" id="rows"></div>
+      <div class="btn-row">
+        <button class="btn-admin" id="add">+ Add sponsor</button>
+        <button class="btn-admin ghost" id="reload">Discard changes</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Preview</h2>
+      <p class="hint">Exactly how it will look on the events page. Hover to pause.</p>
+      <div class="preview-frame">
+        <div class="marquee" data-marquee id="preview-marquee">
+          <div class="marquee-track" data-marquee-track></div>
+        </div>
+      </div>
+      <p class="hint" id="preview-empty" style="text-align:center; margin: 14px 0 0;">Add a sponsor to see the marquee.</p>
+    </div>
+
+    <div class="card">
+      <h2>Publish</h2>
+      <p class="hint">Saving commits to the repo. GitHub Pages rebuilds on its own and the change is live in about a minute.</p>
+      <div class="msg" id="publish-status" hidden></div>
+      <div class="btn-row">
+        <button class="btn-admin sun" id="publish" disabled>Save &amp; publish</button>
+        <a href="https://cbmemorialfund.com/events.html" target="_blank" rel="noopener" style="font-size: 0.86rem;">Open the live events page</a>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="assets/js/main.js?v=9" defer></script>
+  <script src="assets/js/admin.js?v=9" defer></script>
+</body>
+</html>
