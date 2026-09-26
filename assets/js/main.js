@@ -165,8 +165,21 @@
       });
     }
 
-    marquee.style.setProperty("--marquee-duration", Math.max(18, Math.round(halfWidth / MARQUEE_SPEED)) + "s");
+    setDuration(marquee, track, 0);
     return true;
+  }
+
+  /* Derive the loop duration from the measured track. A display:none ancestor
+     reports every width as 0, which would silently floor the duration to the
+     minimum and run the band several times too fast — so retry for a few frames
+     rather than trust a zero. */
+  function setDuration(marquee, track, attempt) {
+    var halfWidth = track.scrollWidth / 2;
+    if (!halfWidth) {
+      if (attempt < 10) requestAnimationFrame(function () { setDuration(marquee, track, attempt + 1); });
+      return;
+    }
+    marquee.style.setProperty("--marquee-duration", Math.max(18, Math.round(halfWidth / MARQUEE_SPEED)) + "s");
   }
 
   var sponsorSection = document.querySelector("[data-sponsors]");
@@ -174,8 +187,21 @@
     fetch("sponsors.json", { cache: "no-cache" })
       .then(function (r) { return r.ok ? r.json() : []; })
       .then(function (list) {
+        if (!Array.isArray(list) || !list.length) return;
         var marquee = sponsorSection.querySelector("[data-marquee]");
-        if (Array.isArray(list) && renderMarquee(marquee, list)) sponsorSection.hidden = false;
+        /* Unhide first: rendering into a hidden section measures zero. */
+        sponsorSection.hidden = false;
+        if (!renderMarquee(marquee, list)) {
+          sponsorSection.hidden = true;
+          return;
+        }
+        /* Chip width and spacing are vw-based, so the track changes size with
+           the window and the duration has to be recomputed. */
+        var resizeTimer;
+        window.addEventListener("resize", function () {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function () { renderMarquee(marquee, list); }, 250);
+        });
       })
       .catch(function () { /* no sponsors file yet: leave the section hidden */ });
   }
